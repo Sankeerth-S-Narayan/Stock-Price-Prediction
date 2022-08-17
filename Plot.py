@@ -17,9 +17,10 @@ from sklearn.preprocessing import MinMaxScaler
 from keras.models import Sequential
 from keras.layers import Dense, LSTM
 import tensorflow as tf
+import plotly.io as pio
 loaded_model= tf.keras.models.load_model('models/model.h5')
 def predict(df_test,number):
-    
+  
     df_test['date'] = pd.to_datetime(df_test['date'])
     df_test['Date'] = [d.date() for d in df_test['date']]
     df_test['Time'] = [d.time() for d in df_test['date']]
@@ -70,7 +71,9 @@ def predict(df_test,number):
 
     fig.update_xaxes(showgrid=False)
     fig.update_yaxes(showgrid=False)
-    plot(fig, auto_open=True)    
+    plot(fig, auto_open=True)  
+    pio.write_html(fig, file='index.html', auto_open=True)
+
     x_input=test_data[len(test_data)-time_step:].reshape(1,-1)
     temp_input=list(x_input)
     temp_input=temp_input[0].tolist()
@@ -134,3 +137,4 @@ def predict(df_test,number):
     fig.update_xaxes(showgrid=False)
     fig.update_yaxes(showgrid=False)
     plot(fig, auto_open=True)
+    pio.write_html(fig, file='index.html', auto_open=True)

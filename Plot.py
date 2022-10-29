@@ -1,3 +1,4 @@
+import streamlit as st
 from plotly.offline import plot
 import pandas as pd
 import numpy as np
@@ -16,6 +17,7 @@ from sklearn.metrics import mean_poisson_deviance, mean_gamma_deviance, accuracy
 from sklearn.preprocessing import MinMaxScaler
 from keras.models import Sequential
 from keras.layers import Dense, LSTM
+import streamlit.components.v1 as components
 import tensorflow as tf
 import plotly.io as pio
 loaded_model= tf.keras.models.load_model('models/model.h5')
@@ -32,6 +34,8 @@ def predict(df_test,number):
     training_size=int(len(df_pred)*0.70)
     test_size=len(df_pred)-training_size
     train_data,test_data=df_pred[0:training_size,:],df_pred[training_size:len(df_pred),:1]
+    title1 = '<br><p style="font-family: Arial, Helvetica, sans-serif;background-color: black;border: 2px solid red;box-shadow: 0px 8px 15px rgba(225, 25, 25, 0.8);text-align:center; font-size: 30px;color:red;text-shadow: 2px 2px #080000;">FORECAST</p><br>'
+    st.markdown(title1, unsafe_allow_html=True)
     def create_dataset(dataset, time_step=1):
         dataX, dataY = [], []
         for i in range(len(dataset)-time_step-1):
@@ -62,18 +66,21 @@ def predict(df_test,number):
                            'original_close': df_test['close'],
                           'train_predicted_close': trainPredictPlot.reshape(1,-1)[0].tolist(),
                           'test_predicted_close': testPredictPlot.reshape(1,-1)[0].tolist()})
+    fig,ax=plt.subplots(1,1)
+    
     fig = px.line(plotdf,x=plotdf['date'], y=[plotdf['original_close'],plotdf['train_predicted_close'],
                                               plotdf['test_predicted_close']],
-                  labels={'value':'Stock price','date': 'Date'})
-    fig.update_layout(title_text='Comparision between original close price vs predicted close price',
-                      plot_bgcolor='white', font_size=15, font_color='black', legend_title_text='Close Price')
+                  labels={'value':'Stock price','date': 'Date'},width=1000,height=800)
+    
+    fig.update_layout(title_text='',
+                      plot_bgcolor='rgba(0,0,0,0.9)', paper_bgcolor='rgba(0,0,0,0.2)', font_size=18, font_color='white', legend_title_text='Close Price')
     fig.for_each_trace(lambda t:  t.update(name = next(names)))
-
-    fig.update_xaxes(showgrid=False)
-    fig.update_yaxes(showgrid=False)
-    plot(fig, auto_open=True)  
-    pio.write_html(fig, file='index.html', auto_open=True)
-
+    
+    with st.container():
+        st.plotly_chart(fig,use_container_width=True)
+    
+    title = '<br><p style="font-family: Arial, Helvetica, sans-serif;background-color: black;border: 2px solid red;box-shadow: 0px 8px 15px rgba(225, 25, 25, 0.8);text-align:center; font-size: 30px;color:red;text-shadow: 2px 2px #080000;">PREDICTED STOCK PRICES</p><br>'
+    st.markdown(title, unsafe_allow_html=True)
     x_input=test_data[len(test_data)-time_step:].reshape(1,-1)
     temp_input=list(x_input)
     temp_input=temp_input[0].tolist()
@@ -87,15 +94,12 @@ def predict(df_test,number):
         if(len(temp_input)>time_step):
         
             x_input=np.array(temp_input[1:])
-        #print("{} day input {}".format(i,x_input))
             x_input = x_input.reshape(1,-1)
             x_input = x_input.reshape((1, n_steps, 1))
         
             yhat = loaded_model.predict(x_input, verbose=0)
-        #print("{} day output {}".format(i,yhat))
             temp_input.extend(yhat[0].tolist())
             temp_input=temp_input[1:]
-        #print(temp_input)
        
             lst_output.extend(yhat.tolist())
             i=i+1
@@ -129,12 +133,14 @@ def predict(df_test,number):
 
     fig = px.line(new_pred_plot,x=new_pred_plot.index, y=[new_pred_plot['last_original_days_value'],
                                                           new_pred_plot['next_predicted_days_value']],
-                  labels={'value': 'Stock price','index': 'Days'})
-    fig.update_layout(title_text='Compare last 15 days vs next {} days'.format(num),
-                      plot_bgcolor='white', font_size=15, font_color='black',legend_title_text='Close Price')
+                  labels={'value': 'Stock price','index': 'Days'},width=1000,height=800)
+    
+    fig.update_layout(title_text='Comparison between last 15 days vs next {} days'.format(num),
+                      plot_bgcolor='rgba(0,0,0,0.9)', paper_bgcolor='rgba(0,0,0,0.2)', font_size=18, font_color='white',legend_title_text='Close Price')
 
+    fig.update_traces(line_color="#E3022F")
     fig.for_each_trace(lambda t:  t.update(name = next(names)))
-    fig.update_xaxes(showgrid=False)
-    fig.update_yaxes(showgrid=False)
-    plot(fig, auto_open=True)
-    pio.write_html(fig, file='index.html', auto_open=True)
+    fig.update_yaxes(zeroline=False)
+    fig.update_yaxes(zeroline=False)
+    with st.container():
+        st.plotly_chart(fig,use_container_width=True)

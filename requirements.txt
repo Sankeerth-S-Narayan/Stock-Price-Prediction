@@ -7,3 +7,4 @@ Plotly
 tensorflow
 sklearn
 keras
+scikit-learn

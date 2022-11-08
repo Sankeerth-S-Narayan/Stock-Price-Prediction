@@ -35,7 +35,7 @@ bullets="""
 """
 st.markdown(new_title, unsafe_allow_html=True)
 st.markdown(content1, unsafe_allow_html=True)
-content2 = '<br><p style="font-family:sans-serif; font-size: 20px">Do you want to check the stocks of the following companies </p>'
+content2 = '<br><p style="font-family:sans-serif; font-size: 20px">Do you want to check the stocks of the following companies (Click \'Submit\' after selecting) </p>'
 st.markdown(content2, unsafe_allow_html=True)
 option=st.selectbox('',('Select the Company','Apollo','Berge Paint','Nestle India','TCS','HDFC','Indus Tower','Infosys','Indian Oil Corporation'))
 content3 = '<br><p style="font-family:sans-serif; font-size: 30px;text-align:center;color:red;">or</p>'

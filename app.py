@@ -20,8 +20,8 @@ footer{visibility:hidden;}
 </style>
 """
 st.markdown(hide_style,unsafe_allow_html=True)
-new_title = '<p style="font-family:sans-serif; font-size: 20px;text-align: left;">Stock market prediction is the act of trying to determine the future value of a company stock or other financial instrument traded on an exchange. The successful prediction of a stocks future price could yield significant profit. </p>'
-content1 = '<br><p style="font-family:sans-serif; font-size: 20px;text-align:center">In this application we will predict the future closing prices of the stocks by plotting a graph . </p>'
+new_title = '<p style="font-family:sans-serif; font-size: 20px;text-align: left;">Stock market prediction is the act of trying to determine the future value of a company stock or other financial instrument traded on an exchange. The successful prediction of a stocks future price could yield significant profit. In this application we will predict the future closing prices of the stocks by plotting a graph. The volatile nature of stocks makes it nearly impossible to predict the exact stock values but trends can be predicted using technical analysis which is what I am using in this application. Though these values might not be exact but these can help stock brokers during prediction. </p>'
+content1 = '<br><p style="font-family:sans-serif; font-size: 20px;">In this application you can check the stock prices of already existing companies from National Stock Exchange or you can upload your company\'s historical data . </p>'
 content = '<br><p style="font-family:sans-serif; font-size: 20px">Upload only a CSV file with the following columns </p>'
 bullets="""
 <ul style="list-style-type:disc">

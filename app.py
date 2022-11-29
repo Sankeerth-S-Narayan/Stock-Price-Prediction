@@ -7,7 +7,7 @@ st.markdown(title, unsafe_allow_html=True)
 page_bg_img = """
 <style>
 .stApp {
-background-image: url("https://axisfinancialgroup.net/wp-content/uploads/2018/03/SLIDE-1.jpg");
+background-image: url("https://financialtribune.com/sites/default/files/field/image/17january/04_wb_1242-ab.jpg");
 background-size: cover;
 }
 </style>
